@@ -60,8 +60,10 @@ bool cmd_parse(Stream& io)
           io.println(F("I don't know sub("));
           io.print(sub);
           io.println(F(")"));
+		  return false
       }
       break;
+
 	// motor
     case 'm':
       break;
@@ -69,7 +71,7 @@ bool cmd_parse(Stream& io)
       io.println(F("I don't know cmd("));
       io.print(cmd);
       io.println(F(")"));
-      break;
+      return false;
     }
 }
 
