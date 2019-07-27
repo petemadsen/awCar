@@ -6,21 +6,61 @@ void setup() {
   Serial.begin(9600);
 
   motor_init();
-  Serial.println("--ready");
+  Serial.println(F("[init] motor"));
 
-  delay(5 * 1000);
-  motor_demo();
+  head_init();
+  Serial.println(F("[init] head"));
+  
+  Serial.println(F("[init] done"));
+
+  //delay(5 * 1000);
+  //motor_demo();
 }
 
 void loop()
 {
-  if (Serial.available())
+  if (Serial.available() >= 2)
   {
     int cmd = Serial.read();
+    int sub = Serial.read();
+    while (Serial.available())
+      Serial.read();
+
     if (cmd < '0' || cmd > 'z')
       return;
     Serial.print(">>");
     Serial.println(cmd);
+
+    switch(cmd)
+    {
+    case 'h':
+      switch (sub)
+      {
+        case 'l':
+          head_left();
+          break;
+        case 'r':
+          head_right();
+          break;
+        case 'f':
+          head_front();
+          break;
+        default:
+          Serial.println(F("I don't know sub("));
+          Serial.print(sub);
+          Serial.println(F(")"));
+      }
+      break;
+    case 'm':
+      break;
+    default:
+      Serial.println(F("I don't know cmd("));
+      Serial.print(cmd);
+      Serial.println(F(")"));
+      break;
+    }
+
+#if 0
     switch(cmd)
     {
       case 's':
@@ -58,9 +98,10 @@ void loop()
         motor_test();
         break;
       default:
-        Serial.println("I don't know");
+        Serial.print("I don't know (");
         break;
     }
+#endif
     Serial.println("--done");
   }
 }
