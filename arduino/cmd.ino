@@ -48,7 +48,7 @@ bool cmd_parse(Stream& io)
 	case 'm':
 		return motor_cmd(sub, io);
 	case 'i':
-		return ir_cmd(sub, io);
+		return ir_dist_cmd(sub, io);
 	default:
 		io.println(F("I don't know cmd("));
 		io.print(cmd);
