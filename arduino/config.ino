@@ -15,4 +15,4 @@ const int pin_ir2 = 10;
 const int pin_ir3 = 11;
 const int pin_ir4 = 12;
 
-const int pin_ir_rcv = 13;
+const int pin_ir_rcv = 31;
