@@ -9,7 +9,7 @@ const int m_head_max = 90;
 
 void head_init()
 {
-	m_head.attach(10);
+	m_head.attach(pin_head);
 	m_head.write(SERVO_CENTER); // center
 }
 
@@ -57,4 +57,27 @@ void head_to(int pos)
 		Serial.println(m_head_pos + 90);
 		delay(25);
 	}
+}
+
+
+bool head_cmd(int cmd, Stream& io)
+{
+	switch (cmd)
+	{
+	case 'l':
+		head_max_left();
+		return true;
+	case 'r':
+		head_max_right();
+		return true;
+	case 'c':
+		head_center();
+		return true;
+	default:
+		io.println(F("[head] I don't know("));
+		io.print(cmd);
+		io.println(F(")"));
+	}
+
+	return false;
 }

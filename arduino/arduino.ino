@@ -1,4 +1,5 @@
-void setup() {
+void setup()
+{
 	Serial.begin(9600);
 
 	cmd_init();
@@ -9,12 +10,13 @@ void setup() {
 
 	head_init();
 	Serial.println(F("[init] head"));
-  
+
 	Serial.println(F("[init] done"));
 
-  //delay(5 * 1000);
-  //motor_demo();
+	//delay(5 * 1000);
+	//motor_demo();
 }
+
 
 void loop()
 {
@@ -22,4 +24,6 @@ void loop()
 	{
 		cmd_put(Serial);
 	}
+
+	ir_loop();
 }

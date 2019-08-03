@@ -43,36 +43,18 @@ bool cmd_parse(Stream& io)
 
 	switch(cmd)
     {
-	// head
-    case 'h':
-      switch (sub)
-      {
-        case 'l':
-          head_max_left();
-          break;
-        case 'r':
-          head_max_right();
-          break;
-        case 'c':
-          head_center();
-          break;
-        default:
-          io.println(F("I don't know sub("));
-          io.print(sub);
-          io.println(F(")"));
-		  return false
-      }
-      break;
-
-	// motor
-    case 'm':
-      break;
-    default:
-      io.println(F("I don't know cmd("));
-      io.print(cmd);
-      io.println(F(")"));
-      return false;
-    }
+	case 'h':
+		return head_cmd(sub, io);
+	case 'm':
+		return motor_cmd(sub, io);
+	case 'i':
+		return ir_cmd(sub, io);
+	default:
+		io.println(F("I don't know cmd("));
+		io.print(cmd);
+		io.println(F(")"));
+		return false;
+	}
 }
 
 

@@ -1,33 +1,25 @@
-const int motor1_pwm = 2;
-const int motor1_in_1 = 3;
-const int motor1_in_2 = 4;
-
-const int motor2_pwm = 5;
-const int motor2_in_1 = 7;
-const int motor2_in_2 = 6;
-
 int motor1_speed = 255;
 int motor2_speed = 255;
 
 
 void motor_init()
 {
-  pinMode(motor1_pwm, OUTPUT) ;    //we have to set PWM pin as output
-  pinMode(motor1_in_1, OUTPUT) ;  //Logic pins are also set as output
-  pinMode(motor1_in_2, OUTPUT) ;
+	pinMode(motor1_pwm, OUTPUT);
+	pinMode(motor1_in_1, OUTPUT);
+	pinMode(motor1_in_2, OUTPUT);
 
-  pinMode(motor2_pwm, OUTPUT) ;    //we have to set PWM pin as output
-  pinMode(motor2_in_1, OUTPUT) ;  //Logic pins are also set as output
-  pinMode(motor2_in_2, OUTPUT) ;
+	pinMode(motor2_pwm, OUTPUT);
+	pinMode(motor2_in_1, OUTPUT);
+	pinMode(motor2_in_2, OUTPUT);
 
-  motor_stop();
+	motor_stop();
 }
 
 
 void motor_speed(int s)
 {
-  motor1_speed = s;
-  motor2_speed = s;
+	motor1_speed = s;
+	motor2_speed = s;
 }
 
 
@@ -70,98 +62,104 @@ value to driver the motor  */
 
 void motor_stop()
 {
-  digitalWrite(motor1_in_1, HIGH);
-  digitalWrite(motor1_in_2, HIGH);
+	digitalWrite(motor1_in_1, HIGH);
+	digitalWrite(motor1_in_2, HIGH);
 
-  digitalWrite(motor2_in_1, HIGH);
-  digitalWrite(motor2_in_2, HIGH);
+	digitalWrite(motor2_in_1, HIGH);
+	digitalWrite(motor2_in_2, HIGH);
 }
 
 
 void motor_forward()
 {
-  digitalWrite(motor1_in_1, HIGH);
-  digitalWrite(motor1_in_2, LOW);
-  analogWrite(motor1_pwm, motor1_speed);
+	digitalWrite(motor1_in_1, HIGH);
+	digitalWrite(motor1_in_2, LOW);
+	analogWrite(motor1_pwm, motor1_speed);
 
-  digitalWrite(motor2_in_1, HIGH);
-  digitalWrite(motor2_in_2, LOW);
-  analogWrite(motor2_pwm, motor2_speed);
+	digitalWrite(motor2_in_1, HIGH);
+	digitalWrite(motor2_in_2, LOW);
+	analogWrite(motor2_pwm, motor2_speed);
 }
 
 
 void motor_backward()
 {
-  digitalWrite(motor1_in_1, LOW) ;
-  digitalWrite(motor1_in_2, HIGH) ;
-  analogWrite(motor1_pwm, motor1_speed) ;
+	digitalWrite(motor1_in_1, LOW) ;
+	digitalWrite(motor1_in_2, HIGH) ;
+	analogWrite(motor1_pwm, motor1_speed) ;
 
-  digitalWrite(motor2_in_1, LOW) ;
-  digitalWrite(motor2_in_2, HIGH) ;
-  analogWrite(motor2_pwm, motor2_speed) ;
+	digitalWrite(motor2_in_1, LOW) ;
+	digitalWrite(motor2_in_2, HIGH) ;
+	analogWrite(motor2_pwm, motor2_speed) ;
 }
 
 
 void motor_left()
 {
-  motor1_speed = 192;
-  motor2_speed = 255;
-  
-  motor_forward();
-  delay(1 * 1000);
-//  motor_stop();
-  motor1_speed = 255;
-  motor2_speed = 255;
+	motor1_speed = 192;
+	motor2_speed = 255;
+
+	motor_forward();
+	delay(1 * 1000);
+	//  motor_stop();
+	motor1_speed = 255;
+	motor2_speed = 255;
 }
 
 
 void motor_right()
 {
-  motor1_speed = 192;
-  motor2_speed = 128;
-  
-  motor_forward();
-  delay(1 * 1000);
-  //motor_stop();
-  motor1_speed = 255;
-  motor2_speed = 255;
+	motor1_speed = 192;
+	motor2_speed = 128;
+
+	motor_forward();
+	delay(1 * 1000);
+	//motor_stop();
+	motor1_speed = 255;
+	motor2_speed = 255;
 }
 
 
 void motor_demo()
 {
-  motor_forward();
-  delay(3 * 1000);
-  motor_left();
-  
-  motor_forward();
-  delay(3 * 1000);
-  motor_right();
+	motor_forward();
+	delay(3 * 1000);
+	motor_left();
 
-  motor_forward();
-  delay(3 * 1000);
+	motor_forward();
+	delay(3 * 1000);
+	motor_right();
 
-  motor_backward();
-  delay(3 * 1000);
+	motor_forward();
+	delay(3 * 1000);
 
-  motor_stop();
+	motor_backward();
+	delay(3 * 1000);
+
+	motor_stop();
 }
 
 
 void motor_test()
 {
-  for (int speed=128; speed<256; speed += 10)
-  {
-    digitalWrite(motor1_in_1, HIGH);
-    digitalWrite(motor1_in_2, LOW);
-    analogWrite(motor1_pwm, speed);
+	for (int speed=128; speed<256; speed += 10)
+	{
+		digitalWrite(motor1_in_1, HIGH);
+		digitalWrite(motor1_in_2, LOW);
+		analogWrite(motor1_pwm, speed);
 
-    digitalWrite(motor2_in_1, HIGH);
-    digitalWrite(motor2_in_2, LOW);
-    analogWrite(motor2_pwm, speed);
+		digitalWrite(motor2_in_1, HIGH);
+		digitalWrite(motor2_in_2, LOW);
+		analogWrite(motor2_pwm, speed);
 
-    delay(200);
-  }
+		delay(200);
+	}
 
-  motor_stop();
+	motor_stop();
+}
+
+
+bool motor_cmd(int cmd, Stream& io)
+{
+	return false;
 }
