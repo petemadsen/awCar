@@ -53,8 +53,8 @@ void gps_add(char ch)
 int gps_msg = 0;
 void gps_parse()
 {
-	if (gps_msg > 3)
-		return;
+//	if (gps_msg > 3)
+//		return;
 
 	if (gps_buffer[0] != '$')
 		return;
@@ -73,9 +73,32 @@ void gps_parse()
 	{
 		Serial.println("--new-pos2");
 		Serial.println(gps_buffer);
-		char* token;
+
 		const char s[2] = ",";
-		token = strtok(gps_buffer, s);
+		int pos = 0;
+		char* token;
+		char* buffer = gps_buffer;
+		while ( (token = strsep(&buffer, s)) != NULL)
+		{
+			if (pos == 2 || pos == 4 || pos == 7 || pos == 9)
+			{
+				Serial.print("--fff [");
+				Serial.print(pos);
+				Serial.print("]");
+				Serial.print(strlen(token));
+				Serial.print(" ");
+				Serial.println(token);
+//				float f = atof(token, NULL);
+//				Serial.println(f);
+			}
+
+			pos++;
+		}
+
+#if 1
+		
+#else
+		char* token = strtok(gps_buffer, s);
 		int pos = 1;
 		while (token != NULL)
 		{
@@ -92,6 +115,7 @@ void gps_parse()
 			token = strtok(NULL, s);
 			pos++;
 		}
+#endif
 		++gps_msg;
 	}
 //	Serial.println(gps_buffer_len);
