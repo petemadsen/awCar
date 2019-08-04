@@ -16,3 +16,6 @@ const int pin_ir3 = 11;
 const int pin_ir4 = 12;
 
 const int pin_ir_rcv = 31;
+
+const int pin_gps_rx = 11;
+const int pin_gps_tx = 12;

@@ -8,8 +8,8 @@ const int ir_last_pin = pin_ir4;
 void ir_dist_init()
 {
 	pinMode(pin_ir1, INPUT);
-	pinMode(pin_ir2, INPUT);
-	pinMode(pin_ir3, INPUT);
+//gps	pinMode(pin_ir2, INPUT);
+//gps	pinMode(pin_ir3, INPUT);
 	pinMode(pin_ir4, INPUT);
 }
 

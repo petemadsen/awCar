@@ -17,6 +17,9 @@ void setup()
 	ir_rcv_init();
 	Serial.println(F("[init] ir receiver"));
 
+	gps_init();
+	Serial.println(F("[init] gps"));
+
 	Serial.println(F("[init] done"));
 
 	//delay(5 * 1000);
@@ -33,4 +36,6 @@ void loop()
 
 	ir_dist_loop();
 	ir_rcv_loop();
+
+	gps_loop();
 }
