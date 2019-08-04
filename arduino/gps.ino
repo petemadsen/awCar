@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include <SoftwareSerial.h>
 
 // Default baud of NEO-6M is 9600
@@ -11,7 +13,7 @@ unsigned int gps_buffer_len = 0;
 
 
 #define GPS_NMEA_POS1	"$GPRMC"
-#define GPS_NMEA_POS2	"$GPRGA"
+#define GPS_NMEA_POS2	"$GPGGA"
 
 
 SoftwareSerial gpsSerial(pin_gps_rx, pin_gps_tx);
@@ -51,7 +53,7 @@ void gps_add(char ch)
 int gps_msg = 0;
 void gps_parse()
 {
-	if (++gps_msg > 10)
+	if (gps_msg > 3)
 		return;
 
 	if (gps_buffer[0] != '$')
@@ -63,13 +65,34 @@ void gps_parse()
 
 	if (strncmp(gps_buffer, GPS_NMEA_POS1, strlen(GPS_NMEA_POS1)) == 0)
 	{
-		Serial.println("--new-pos1");
-		Serial.println(gps_buffer);
+//		Serial.println("--new-pos1");
+//		Serial.println(gps_buffer);
+//		++gps_msg;
 	}
 	else if (strncmp(gps_buffer, GPS_NMEA_POS2, strlen(GPS_NMEA_POS2)) == 0)
 	{
 		Serial.println("--new-pos2");
 		Serial.println(gps_buffer);
+		char* token;
+		const char s[2] = ",";
+		token = strtok(gps_buffer, s);
+		int pos = 1;
+		while (token != NULL)
+		{
+			if (pos == 3 || pos == 5)
+			{
+				Serial.print("--fff [");
+				Serial.print(pos);
+				Serial.print("] ");
+				Serial.println(token);
+//				float f = atof(token, NULL);
+//				Serial.println(f);
+			}
+
+			token = strtok(NULL, s);
+			pos++;
+		}
+		++gps_msg;
 	}
 //	Serial.println(gps_buffer_len);
 }
