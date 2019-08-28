@@ -135,20 +135,21 @@ static void car_speed_slow(int slow)
 }
 
 
-static void car_throttle_up()
+static void car_throttle_down(int pressed)
 {
-	my_log("STOP");
-	car_throttle = 0;
-	car_motors_off();
-}
-
-
-static void car_throttle_down()
-{
-	my_log("THROTTLE");
-	car_throttle = 1;
-	if (car_direction != 0)
-		car_motors_on();
+	if (pressed)
+	{
+		my_log("THROTTLE");
+		car_throttle = 1;
+		if (car_direction != 0)
+			car_motors_on();
+	}
+	else
+	{
+		my_log("STOP");
+		car_throttle = 0;
+		car_motors_off();
+	}
 }
 
 
@@ -157,14 +158,14 @@ int main()
 	my_log_nl("--- drive forward, slowly");
 	car_direction_switch(+1);
 	car_speed_slow(1);
-	car_throttle_down();
+	car_throttle_down(1);
 
 	my_log_nl("--- STOP");
-	car_throttle_up();
+	car_throttle_down(0);
 
 	my_log_nl("--- drive forward, fast");
 	car_speed_slow(0);
-	car_throttle_down();
+	car_throttle_down(1);
 
 	my_log_nl("--- drive forward, slow/fast/slow");
 	car_speed_slow(1);
@@ -181,7 +182,7 @@ int main()
 	car_direction_switch(0);
 
 	my_log_nl("--STOP");
-	car_throttle_up();
+	car_throttle_down(0);
 
 	return 0;
 }
