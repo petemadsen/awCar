@@ -3,6 +3,12 @@
 
 
 
+extern void motor_forward();
+extern void motor_backward();
+extern void motor_speed(int speed);
+
+
+
 static int car_direction = 0; // -1 back, 0 stop, +1 forward
 
 #define CAR_FAST_SPEED 9
@@ -13,7 +19,7 @@ static int car_max_speed = CAR_SLOW_SPEED;
 static int car_throttle = 0;
 
 
-static void my_log(const char* what)
+void my_log(const char* what)
 {
 	int len = printf("D %02d  S %d/%d  T %d | ",
 			car_direction, car_speed, car_max_speed, car_throttle);
@@ -36,9 +42,9 @@ static void car_motors_off()
 
 	while (--car_speed != 0)
 	{
-		my_log("speed-");
+		motor_speed(car_speed);
 	}
-	my_log("speed-");
+	motor_speed(0);
 }
 
 
@@ -47,8 +53,10 @@ static void car_motors_set_direction()
 	switch (car_direction)
 	{
 	case 1:
+		motor_forward();
 		break;
 	case -1:
+		motor_backward();
 		break;
 	case 0:
 		break;
@@ -66,17 +74,17 @@ static void car_motors_on()
 	{
 		while (--car_speed != car_max_speed)
 		{
-			my_log("-speed+");
+			motor_speed(car_speed);
 		}
-		my_log("-speed+");
+		motor_speed(car_speed);
 		return;
 	}
 
 	while (++car_speed != car_max_speed)
 	{
-		my_log("speed+");
+		motor_speed(car_speed);
 	}
-	my_log("speed+");
+	motor_speed(car_speed);
 }
 
 
@@ -88,6 +96,7 @@ static void car_direction_switch(int dir)
 	// basically, stop, no matter what throttle says
 	if (dir == 0)
 	{
+		my_log("stop direction");
 		car_motors_off();
 		return;
 	}
@@ -107,21 +116,22 @@ static void car_direction_switch(int dir)
 }
 
 
-static void car_slow_speed()
+static void car_speed_slow(int slow)
 {
-	my_log("SLOW");
-	car_max_speed = CAR_SLOW_SPEED;
-	if (car_throttle)
-		car_motors_on();
-}
-
-
-static void car_fast_speed()
-{
-	my_log("FAST");
-	car_max_speed = CAR_FAST_SPEED;
-	if (car_throttle)
-		car_motors_on();
+	if (slow)
+	{
+		my_log("SLOW");
+		car_max_speed = CAR_SLOW_SPEED;
+		if (car_throttle)
+			car_motors_on();
+	}
+	else
+	{
+		my_log("FAST");
+		car_max_speed = CAR_FAST_SPEED;
+		if (car_throttle)
+			car_motors_on();
+	}
 }
 
 
@@ -146,20 +156,20 @@ int main()
 {
 	my_log_nl("--- drive forward, slowly");
 	car_direction_switch(+1);
-	car_slow_speed();
+	car_speed_slow(1);
 	car_throttle_down();
 
 	my_log_nl("--- STOP");
 	car_throttle_up();
 
 	my_log_nl("--- drive forward, fast");
-	car_fast_speed();
+	car_speed_slow(0);
 	car_throttle_down();
 
 	my_log_nl("--- drive forward, slow/fast/slow");
-	car_slow_speed();
-	car_fast_speed();
-	car_slow_speed();
+	car_speed_slow(1);
+	car_speed_slow(0);
+	car_speed_slow(1);
 
 	my_log_nl("--drive backward");
 	car_direction_switch(-1);
@@ -168,6 +178,7 @@ int main()
 	car_direction_switch(+1);
 	car_direction_switch(-1);
 	car_direction_switch(+1);
+	car_direction_switch(0);
 
 	my_log_nl("--STOP");
 	car_throttle_up();
